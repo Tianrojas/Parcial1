@@ -12,11 +12,11 @@ public class ReflectiveResolver {
         String output = "";
         Class c = Class.forName(cst);
         for(Field f : c.getFields()){
-            output += "<p> Field: "+ f.getName() + "</p> \n";
+            output += "        <p> Field: "+ f.getName() + " </p> \n";
         }
 
         for(Method m : c.getMethods()){
-            output += "<p> Method: "+ m.getName() +"</p> \n";
+            output += "        <p> Method: "+ m.getName() +" </p> \n";
         }
 
         return output;
@@ -57,6 +57,7 @@ public class ReflectiveResolver {
         Object res = null;
         for (Method m : c.getMethods()){
             if (m.getName().equals(mth)){
+                
                 res = m.invoke(null, arg1, arg2);
             }
         }

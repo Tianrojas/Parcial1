@@ -1,12 +1,13 @@
 package org.example;
 
+import java.lang.reflect.InvocationTargetException;
 import java.net.*;
 import java.io.*;
 
 import static java.util.EnumSet.range;
 
 public class HttpServer {
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException, InvocationTargetException, IllegalAccessException {
         ServerSocket serverSocket = null;
         try {
             serverSocket = new ServerSocket(35000);
@@ -58,16 +59,14 @@ public class HttpServer {
                 if (calling.startsWith("Class")){
                     outputLine = buildHTTP(ReflectiveResolver.getHTTPClass(getParams(calling)[0]));
                 }else if(calling.startsWith("invoke")){
-
+                    //outputLine = buildHTTP(ReflectiveResolver.getHTTPInvoke(getParams(calling)[0]));
                 }else if(calling.startsWith("unaryInvoke")){
 
                 }else if(calling.startsWith("binaryInvoke")){
-                    System.out.println(getParams(calling));
+                    outputLine = buildHTTP(ReflectiveResolver.getHTTPBinaryInvoke(getParams(calling)[0],getParams(calling)[1], getParams(calling)[3], getParams(calling)[4]));
                 }else {
                     new IOException("Function not supported");
                 }
-                outputLine = "";
-
             }
 
 
@@ -109,15 +108,16 @@ public class HttpServer {
                 + "<meta charset=\"UTF-8\">\n"
                 + "<title>Main</title>\n"
                 + "</head>\n"
+                + "<body>\n"
                 + body
+                + "</body>\n"
                 + "</html>\n";
         System.out.println(outputLine);
         return outputLine;
     }
 
     public static String httpForm(){
-        return  "<body>\n" +
-                "        <h1>Form with GET</h1>\n" +
+        return  "        <h1>Form with GET</h1>\n" +
                 "        <form action=\"/hello\">\n" +
                 "            <label for=\"name\">Name:</label><br>\n" +
                 "            <input type=\"text\" id=\"name\" name=\"name\" value=\"John\"><br><br>\n" +
@@ -137,8 +137,7 @@ public class HttpServer {
                 "                xhttp.send();\n" +
                 "            }\n" +
                 "        </script>\n" +
-                "\n" +
-                "    </body>";
+                "\n";
     }
 
 }
